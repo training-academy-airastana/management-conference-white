@@ -1,0 +1,16 @@
+node_modules/
+.hallmark/
+.variants/
+/Management-Conference-original/
+.next/
+out/
+build/
+dist/
+.DS_Store
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*

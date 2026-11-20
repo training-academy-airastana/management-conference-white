@@ -1,0 +1,14 @@
+Conference brand assets — retrieved 19 November 2026
+
+Gilroy files were taken from the CSS-referenced assets of the official
+Air Astana investor relations website for this Air Astana Group conference.
+Stylesheet: https://ir.airastana.com/css/app.min.css?v=6
+Regular: https://ir.airastana.com/media/8df14962a09b6a6/gilroy.woff2
+Medium: https://ir.airastana.com/media/8df1496292e5ef6/gilroy-medium.woff2
+Bold: https://ir.airastana.com/media/8df149629b8a6b1/gilroy-bold.woff2
+
+Air Astana Group logo:
+https://ir.airastana.com/media/8def830fd789615/logogroup.png
+
+Gilroy is not covered by the OFL-Manrope.txt licence.
+The earlier Manrope font and its licence are retained with the prior assets.

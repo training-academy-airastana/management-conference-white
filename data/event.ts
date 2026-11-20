@@ -1,0 +1,16 @@
+export const event = {
+  name: 'XVIII Management Conference 2026',
+  date: '2026-12-03T09:00:00+05:00',
+  dateLabel: 'December 3, 2026',
+  theme: 'Going Global: From Ambition to Execution',
+  subtitleOptions: ['New Normal', 'Charting Our Course', 'Setting Our Course', 'The Journey Ahead'],
+  format: 'Hybrid Conference — Offline & Online',
+  venue: 'InterContinental Almaty',
+  address: 'Zheltoksan St 181, Almaty',
+  ceoQuote: 'We are not simply navigating the New Normal; we are positioning ourselves to grow through it, strengthening and widening our gap as the leading airline group of Central Asia & Caucasus and already taking off to Go Global. The foundations we are building today will be critical to executing the Long Term Plan ahead of us.',
+  topics: ['Organizational Efficiency', 'Customer Experience', 'Commercial & Distribution', 'Operational Excellence'],
+  registrationUrl: '',
+  directionsUrl: 'https://www.google.com/maps/search/?api=1&query=InterContinental+Almaty+Zheltoksan+181',
+  contact: '',
+  experienceUrls: { kahoot: '', aiVernissage: '', workshop: '', networking: '' },
+};

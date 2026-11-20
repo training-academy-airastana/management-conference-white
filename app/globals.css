@@ -1,0 +1,7 @@
+/* Hallmark ? theme: brand ? redesign: feedback ? genre: editorial ? hero: Banner
+ * Updated to the supplied November 2026 feedback. Gilroy and Group logo from ir.airastana.com.
+ * Compact agenda shares one dataset across all three views and devices. */
+@import 'tailwindcss';
+@import './tokens.css';
+@import './base.css';
+@import './conference.css';
