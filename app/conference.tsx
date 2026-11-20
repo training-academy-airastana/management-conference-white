@@ -78,23 +78,24 @@ export default function Conference() {
     if (!menu) return;
     const main = document.querySelector<HTMLElement>('.conference-content');
     const wasInert = main?.inert ?? false;
-    const oldOverflow = document.body.style.overflowY;
+    const oldOverflow = document.documentElement.style.overflowY;
     if (main) main.inert = true;
-    document.body.style.overflowY = 'hidden';
+    document.documentElement.style.overflowY = 'hidden';
     const close = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') { setMenu(false); menuButton.current?.focus(); }
+      if (e.key === 'Escape') { setMenu(false); menuButton.current?.focus({ preventScroll: true }); }
       if (e.key === 'Tab') {
         const controls = [...(navigationShell.current?.querySelectorAll<HTMLElement>('a[href], button:not(:disabled)') ?? [])].filter(node => node.getClientRects().length > 0);
         if (!controls.length) return;
         const index = controls.indexOf(document.activeElement as HTMLElement);
         e.preventDefault();
-        controls[(index + (e.shiftKey ? -1 : 1) + controls.length) % controls.length].focus();
+        const next = controls[(index + (e.shiftKey ? -1 : 1) + controls.length) % controls.length];
+        next.focus({ preventScroll: !next.closest('.navigation-panel') });
       }
     };
     document.addEventListener('keydown', close);
     return () => {
       document.removeEventListener('keydown', close);
-      document.body.style.overflowY = oldOverflow;
+      document.documentElement.style.overflowY = oldOverflow;
       if (main) main.inert = wasInert;
     };
   }, [menu]);
@@ -121,7 +122,7 @@ export default function Conference() {
         </div>)}</nav>
       </div>
     </div>
-    {menu && <button type="button" className="navigation-scrim" aria-label="Close navigation" onClick={() => { setMenu(false); menuButton.current?.focus(); }}/>}
+    {menu && <button type="button" className="navigation-scrim" aria-label="Close navigation" onClick={() => { setMenu(false); menuButton.current?.focus({ preventScroll: true }); }}/>}
     <main className="conference-content">
       <section className="conference-hero section" id="top">
         <p className="conference-name">{event.name}</p><h1>Going Global:<br/>From Ambition to Execution</h1>
@@ -176,9 +177,9 @@ function DetailDialog({ content, setContent }: { content: ModalContent | null; s
     if (!node || !isOpen) return;
     opener.current = document.activeElement as HTMLElement;
     if (!node.open) node.showModal();
-    const oldOverflow = document.body.style.overflowY;
-    document.body.style.overflowY = 'hidden';
-    return () => { document.body.style.overflowY = oldOverflow; if (node.open) node.close(); opener.current?.focus({ preventScroll: true }); };
+    const oldOverflow = document.documentElement.style.overflowY;
+    document.documentElement.style.overflowY = 'hidden';
+    return () => { document.documentElement.style.overflowY = oldOverflow; if (node.open) node.close(); opener.current?.focus({ preventScroll: true }); };
   }, [isOpen]);
   useEffect(() => {
     if (isOpen) dialog.current?.querySelector<HTMLButtonElement>('.dialog-close')?.focus();

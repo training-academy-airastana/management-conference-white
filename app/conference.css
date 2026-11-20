@@ -28,7 +28,7 @@ figure, blockquote { margin: 0; }
 .quick-navigation a, .quick-navigation button { display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 8px 0; border: 0; background: none; font-size: 16px; }
 .quick-navigation a:hover, .quick-navigation a[aria-current], .quick-navigation button:hover, .quick-navigation button[aria-current] { text-decoration: underline; text-decoration-thickness: 2px; }
 .quick-navigation button[aria-expanded=true] svg { transform: rotate(180deg); }
-.navigation-panel { position: absolute; top: 100%; left: 0; right: 0; max-height: calc(100dvh - var(--navigation-height)); overflow-y: auto; overscroll-behavior: contain; background: var(--paper); border-bottom: 1px solid var(--rule); }
+.navigation-panel { position: fixed; top: var(--navigation-height); left: 0; right: 0; max-height: calc(100dvh - var(--navigation-height)); overflow-y: auto; overscroll-behavior: contain; background: var(--paper); border-bottom: 1px solid var(--rule); }
 .grouped-navigation { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; max-width: 1500px; margin-inline: auto; padding: 28px var(--page-padding) 32px; }
 .navigation-group h2 { margin-bottom: 12px; font-size: 18px; font-weight: 500; letter-spacing: 0; }
 .navigation-group-toggle { display: none; }

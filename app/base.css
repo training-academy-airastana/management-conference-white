@@ -1,5 +1,5 @@
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 104px; overflow-x: clip; }
+html { scroll-behavior: smooth; scroll-padding-top: 104px; overflow-x: clip; scrollbar-gutter: stable; }
 body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: clip; }
 ::selection { background: var(--gold); color: var(--navy); }
 :focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; }
