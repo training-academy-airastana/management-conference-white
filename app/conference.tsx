@@ -46,12 +46,33 @@ export default function Conference() {
   useEffect(() => {
     const initial = new URLSearchParams(window.location.search).get('agenda');
     if (views.some(item => item.value === initial)) setView(initial as AgendaView);
-    const observer = new IntersectionObserver(entries => {
-      const visible = entries.filter(e => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-      if (visible[0]) setActive(visible[0].target.id);
-    }, { rootMargin: '-10% 0px -55% 0px', threshold: [0, .1, .5] });
-    navigation.forEach(([, id]) => { const node = document.getElementById(id); if (node) observer.observe(node); });
-    return () => observer.disconnect();
+    const sections = navigation.map(([, id]) => document.getElementById(id)).filter((node): node is HTMLElement => node !== null);
+    let frame = 0;
+    const updateActive = () => {
+      frame = 0;
+      const activationLine = (navigationShell.current?.getBoundingClientRect().bottom ?? 0) + 16;
+      let current = sections[0]?.id ?? 'top';
+      for (const section of sections) {
+        if (section.getBoundingClientRect().top > activationLine) break;
+        current = section.id;
+      }
+      if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2) current = sections.at(-1)?.id ?? current;
+      setActive(previous => previous === current ? previous : current);
+    };
+    const scheduleUpdate = () => { if (!frame) frame = window.requestAnimationFrame(updateActive); };
+    const resizeObserver = new ResizeObserver(scheduleUpdate);
+    if (navigationShell.current) resizeObserver.observe(navigationShell.current);
+    const content = document.querySelector('.conference-content');
+    if (content) resizeObserver.observe(content);
+    window.addEventListener('scroll', scheduleUpdate, { passive: true });
+    window.addEventListener('resize', scheduleUpdate);
+    scheduleUpdate();
+    return () => {
+      window.cancelAnimationFrame(frame);
+      resizeObserver.disconnect();
+      window.removeEventListener('scroll', scheduleUpdate);
+      window.removeEventListener('resize', scheduleUpdate);
+    };
   }, []);
   useEffect(() => {
     if (!menu) return;
@@ -86,12 +107,13 @@ export default function Conference() {
     });
   };
   const changeView = (next: AgendaView) => { setView(next); const url = new URL(window.location.href); url.searchParams.set('agenda', next); window.history.replaceState(null, '', url); };
+  const quickActive = ['top', 'about', 'topics'].includes(active) ? 'top' : active;
 
   return <div className="conference-shell">
     <a className="skip-link" href="#agenda">Skip to agenda</a>
     <div className="site-navigation-shell" ref={navigationShell}>
       <header className="site-masthead"><div className="masthead-inner"><button ref={menuButton} type="button" className="menu-toggle" onClick={() => setMenu(!menu)} aria-controls="conference-navigation" aria-expanded={menu} aria-label={menu ? 'Close navigation' : 'Open navigation'}>{menu ? <X size={22}/> : <Menu size={22}/>}<span>{menu ? 'Close' : 'Menu'}</span></button><a href="#top" onClick={() => navigateTo('top')} aria-label="Air Astana Group home"><Image src={asset('/air-astana-group.png')} alt="Air Astana Group" width={205} height={31} priority/></a><p className="masthead-conference">XVIII Management Conference<span>3 December 2026 / Almaty</span></p></div></header>
-      <nav className="quick-navigation" aria-label="Main conference sections"><div>{navigation.filter(([, id]) => ['top', 'agenda', 'questions', 'vernissage'].includes(id)).map(([label, id]) => <a key={id} href={`#${id}`} aria-current={active === id ? 'location' : undefined} onClick={() => navigateTo(id)}>{label}</a>)}<button type="button" aria-expanded={menu} aria-controls="conference-navigation" onClick={() => setMenu(!menu)}>All sections<ChevronDown size={16} aria-hidden="true"/></button></div></nav>
+      <nav className="quick-navigation" aria-label="Main conference sections"><div>{navigation.filter(([, id]) => ['top', 'agenda', 'questions', 'vernissage'].includes(id)).map(([label, id]) => <a key={id} href={`#${id}`} aria-current={quickActive === id ? 'location' : undefined} onClick={() => navigateTo(id)}>{label}</a>)}<button type="button" aria-current={['information', 'venue'].includes(active) ? 'location' : undefined} aria-expanded={menu} aria-controls="conference-navigation" onClick={() => setMenu(!menu)}>All sections<ChevronDown size={16} aria-hidden="true"/></button></div></nav>
       <div className="navigation-panel" hidden={!menu}>
         <nav id="conference-navigation" aria-label="All conference sections" className="grouped-navigation">{navigationGroups.map(group => <div className={`navigation-group ${expandedGroup === group.label ? 'is-expanded' : ''}`} key={group.label}>
           <h2>{group.label}</h2><button type="button" className="navigation-group-toggle" aria-expanded={expandedGroup === group.label} aria-controls={`navigation-group-${group.ids[0]}`} onClick={() => setExpandedGroup(expandedGroup === group.label ? null : group.label)}>{group.label}<ChevronDown size={18} aria-hidden="true"/></button>
